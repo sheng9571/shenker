@@ -1,0 +1,23 @@
+FROM alpine:3.3
+
+WORKDIR /mysql
+VOLUME /mysql
+COPY startup.sh /startup.sh
+
+RUN echo "http://dl-4.alpinelinux.org/alpine/v3.3/main" > /etc/apk/repositories
+
+RUN apk add --update --no-cache mysql mysql-client && rm -f /var/cache/apk/*
+COPY my.cnf /etc/mysql/my.cnf
+
+# Reference environment variables
+ARG MYSQL_ROOT_PASSWORD
+ARG MYSQL_DATABASE
+ARG MYSQL_USER
+ARG MYSQL_PASSWORD
+
+# CMD ['/usr/bin/mysqld -u root -p${MYSQL_ROOT_PASSWORD} --execute "show databases;"']
+CMD ['/usr/bin/mysqld -u root -p${MYSQL_ROOT_PASSWORD} --execute "GRANT ALL PRIVILEGES ON *.* TO '${MYSQLTUESR}'@'%' IDENTIFIED BY 'password' WITH GRANT OPTION;"']
+CMD ['/usr/bin/mysqld -u root -p${MYSQL_PASSWORD} --execute "FLUSH PRIVILEGES;";]
+
+EXPOSE 3306
+CMD ["/startup.sh"]

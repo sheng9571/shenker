@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+
+  mysql:
+    container_name: mysql
+    image: mysql:0.0
+    # ports:
+    #   - 3306:3306
+    build:
+      context: ./mysql
+      dockerfile: mysql_docker_file
+    environment:
+      MYSQL_DATABASE: test
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./mysql/data:/mysql
+    restart: always
+
+  phpfpm:
+    container_name: phpfpm
+    image: phpfpm:0.0
+    build:
+      context: ./php
+    volumes:
+      - ./nginx/res/html:/usr/share/nginx/html
+    restart: always
+
+  nginx:
+    container_name: nginx
+    image: nginx:0.0
+    ports:
+      - 80:80
+      - 443:443
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    volumes:
+      - ./nginx/log:/var/log/nginx
+      - ./nginx/res/html:/usr/share/nginx/html
+    restart: always
+    depends_on:
+      - phpfpm
+      - mysql
+    # links:
+    #   - php-fpm:php-fpm
