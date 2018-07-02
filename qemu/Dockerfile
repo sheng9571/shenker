@@ -8,7 +8,7 @@ RUN sudo sed -i '1, $s/archive.ubuntu.com/free.nchc.org.tw/g' /etc/apt/sources.l
     # ntp, check time
 	sudo apt-get install -y ntp ntpdate && \
     # python2 environment
-    sudo apt-get install -y python python-setuptools python-dev build-essential && \
+    sudo apt-get install -y python2.7 python-setuptools python-dev build-essential && \
     # python3 environment
     sudo apt-get install -y python3 python3-setuptools python3-dev python3-pip python3-lxml && \
     # vim、tmux、zsh、git、tar、zip、ssh
