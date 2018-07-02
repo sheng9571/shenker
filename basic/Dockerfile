@@ -7,8 +7,10 @@ RUN sudo sed -i '1, $s/archive.ubuntu.com/free.nchc.org.tw/g' /etc/apt/sources.l
     sudo apt-get dist-upgrade -y && \
     # ntp, check time
 	sudo apt-get install -y ntp ntpdate && \
-    # python environment
-    sudo apt-get install -y python python-setuptools python-dev build-essential python3 python3-setuptools python3-dev python3-pip && \
+    # python2 environment
+    sudo apt-get install -y python python-setuptools python-dev build-essential &&  \
+    # python3 environment
+    sudo apt-get install -y python3 python3-setuptools python3-dev python3-pip python3-lxml && \
     # vim、tmux、zsh、git、tar、zip、ssh
     sudo apt-get install -y vim tmux zsh git tar unzip openssh-server && \
     # wget、curl、nc、nmap
@@ -18,7 +20,9 @@ RUN sudo sed -i '1, $s/archive.ubuntu.com/free.nchc.org.tw/g' /etc/apt/sources.l
 	export TZ='Asia/Taipei' && \
 	sudo /etc/init.d/ntp stop && sudo cp /usr/share/zoneinfo/Asia/Taipei /etc/localtime && sudo ntpdate tw.pool.ntp.org && sudo /etc/init.d/ntp start && \
 	# pip2 settings
-	sudo easy_install pip && sudo pip install --upgrade pip && sudo pip install requests lxml && \
+	sudo easy_install pip && sudo pip2 install --upgrade pip && sudo pip install requests lxml && \
+	# pip3 settings
+    sudo pip3 install --upgrade pip && sudo pip3 install requests && \
 	# set config files
 	chsh -s $(which zsh) && cd ~ && git clone --recursive https://github.com/sheng9571/dotfiles.git ~/.dotfiles && cd ~/.dotfiles && make && cd ~ && \
     # ver="2.7.15" && mkdir -p /tmp/python && cd /tmp/python && \

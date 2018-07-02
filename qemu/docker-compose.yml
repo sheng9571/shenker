@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+
+    base:
+        container_name: sheng_qemu
+        image: sheng_qemu:0.0
+        ports:
+          - "9453:22"
+        build:
+          context: ./
+        privileged: true
+        hostname: sheng_qemu
+        restart: always
