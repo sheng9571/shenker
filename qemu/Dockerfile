@@ -11,8 +11,8 @@ RUN sudo sed -i '1, $s/archive.ubuntu.com/free.nchc.org.tw/g' /etc/apt/sources.l
     sudo apt-get install -y python2.7 python-setuptools python-dev build-essential && \
     # python3 environment
     sudo apt-get install -y python3 python3-setuptools python3-dev python3-pip python3-lxml && \
-    # vim、tmux、zsh、git、tar、zip、ssh
-    sudo apt-get install -y vim tmux zsh git tar unzip openssh-server && \
+    # sudo、man、vim、tmux、zsh、git、tar、zip、ssh
+    sudo apt-get install -y sudo man vim tmux zsh git tar unzip openssh-server && \
     # wget、curl、nc、nmap
     sudo apt-get install -y wget curl nmap && \
     # debug tools

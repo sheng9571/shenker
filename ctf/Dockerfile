@@ -11,8 +11,8 @@ RUN sudo sed -i '1, $s/archive.ubuntu.com/free.nchc.org.tw/g' /etc/apt/sources.l
     sudo apt-get install -y python2.7 python-setuptools python-dev build-essential && \
     # python3 environment
     sudo apt-get install -y python3 python3-setuptools python3-dev python3-pip python3-lxml && \
-    # vim、tmux、zsh、git、tar、zip、ssh
-    sudo apt-get install -y vim tmux zsh git tar unzip openssh-server && \
+    # sudo、man、im、tmux、zsh、git、tar、zip、ssh
+    sudo apt-get install -y sudo man vim tmux zsh git tar unzip openssh-server && \
     # wget、curl、nc、nmap
     sudo apt-get install -y wget curl nmap && \
     # debug tools
@@ -42,6 +42,14 @@ RUN sudo sed -i '1, $s/archive.ubuntu.com/free.nchc.org.tw/g' /etc/apt/sources.l
     # wget https://www.python.org/ftp/python/$ver/Python-$ver.tgz && tar xzf Python-$ver.tgz && \
     # cd /tmp/python/Python-$ver && ./configure --enable-optimizations --prefix=/usr/bin/ && make && make install && \
     # cd /tmp && rm -rf python && cd ~ && \
+    # Install ctf tools & update
+    cd ~ && git clone --recursive https://github.com/sheng9571/ctf_tools ~/.ctf_tools && cd ~/.ctf_tools && echo >> ~/.zshrc && cat ctf_rc >> ~/.zshrc && git submodule update --recursive && git pull --recurse-submodules && git submodule foreach --recursive 'git pull origin master || :' && git submodule foreach --recursive 'git pull origin dev || :' && cd ~ && \
+    # Install pwntools
+    sudo pip install --upgrade pwntools && \
+    # Install uncompyle2
+    cd ~/.ctf_tools/uncompyle2 && sudo python setup.py install && cd ~ && \
+    # Install RsaCtfTool
+    sudo apt install -y libgmp-dev libmpfr-dev libmpc-dev && cd ~/.ctf_tools/RsaCtfTool && sudo pip install -r requirements.txt && cd ~ && \
 	# clean
 	sudo apt-get clean && sudo rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
     # show ip
