@@ -43,13 +43,26 @@ RUN sudo sed -i '1, $s/archive.ubuntu.com/free.nchc.org.tw/g' /etc/apt/sources.l
     # cd /tmp/python/Python-$ver && ./configure --enable-optimizations --prefix=/usr/bin/ && make && make install && \
     # cd /tmp && rm -rf python && cd ~ && \
     # Install ctf tools & update
-    cd ~ && git clone --recursive https://github.com/sheng9571/ctf_tools ~/.ctf_tools && cd ~/.ctf_tools && echo >> ~/.zshrc && cat ctf_rc >> ~/.zshrc && git submodule update --recursive && git pull --recurse-submodules && git submodule foreach --recursive 'git pull origin master || :' && git submodule foreach --recursive 'git pull origin dev || :' && cd ~ && \
+    cd ~ && git clone --recursive https://github.com/sheng9571/ctf_tools ~/.ctf_tools && cd ~/.ctf_tools && echo >> ~/.zshrc && cat ctf_rc >> ~/.zshrc && cat ctf_rc >> ~/.bashrc && git submodule update --recursive && git pull --recurse-submodules && git submodule foreach --recursive 'git pull origin master || :' && git submodule foreach --recursive 'git pull origin dev || :' && cd ~ && \
     # Install pwntools
     sudo pip install --upgrade pwntools && \
     # Install uncompyle2
     cd ~/.ctf_tools/uncompyle2 && sudo python setup.py install && cd ~ && \
     # Install RsaCtfTool
-    sudo apt install -y libgmp-dev libmpfr-dev libmpc-dev && cd ~/.ctf_tools/RsaCtfTool && sudo pip install -r requirements.txt && cd ~ && \
+    sudo apt install -y libgmp-dev libmpfr-dev libmpc-dev python3-gmpy2 && cd ~/.ctf_tools/RsaCtfTool && sudo pip install -r requirements.txt && sudo pip3 install --upgrade pycrypto && cd ~ && \
+    # Install binwalk
+    cd ~/.ctf-tools/binwalk && sudo python setup.py install && sudo apt-get install -y python-lzma && cd ~ && \
+    # Install sasquatch (to extract non-standard SquashFS images)
+    cd ~/.ctf-tools/sasquatch && sudo apt-get install -y build-essential liblzma-dev liblzo2-dev zlib1g-dev && sudo ./build.sh && cd ~ && \
+    # Install rsatool
+    cd ~/.ctf-tools/rsatool && sudo python setup.py install && cd ~ && \
+
+    # Install Misc Tool
+    # ExifTool
+    sudo apt-get install -y libimage-exiftool-perl && \
+    # pngcheck
+    sudo apt-get install -y pngcheck && \
+
 	# clean
 	sudo apt-get clean && sudo rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
     # show ip
