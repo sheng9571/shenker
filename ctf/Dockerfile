@@ -62,6 +62,8 @@ RUN sudo sed -i '1, $s/archive.ubuntu.com/free.nchc.org.tw/g' /etc/apt/sources.l
     sudo apt-get install -y libimage-exiftool-perl && \
     # pngcheck
     sudo apt-get install -y pngcheck && \
+    # zsteg
+    sudo apt-get install -y ruby && sudo gem install rubygems-update && sudo update_rubygems && sudo gem install rake -v 12.2.1 && sudo gem install rainbow -v 2.2.2 && sudo gem install zsteg
 
 	# clean
 	sudo apt-get clean && sudo rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
