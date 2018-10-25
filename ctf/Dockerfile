@@ -17,6 +17,8 @@ RUN sudo sed -i '1, $s/archive.ubuntu.com/free.nchc.org.tw/g' /etc/apt/sources.l
     sudo apt-get install -y wget curl nmap && \
     # debug tools
     sudo apt-get install -y gdb ltrace strace && \
+    # nasm
+    sudo apt-get install -y nasm && \
     # lxml requirements
     sudo apt-get install -y libxml2-dev libxslt-dev && \
     # x64 run x86 lib
