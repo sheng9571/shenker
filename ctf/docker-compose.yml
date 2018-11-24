@@ -9,6 +9,8 @@ services:
           - "9453:22"
         build:
           context: ./
+        volumes:
+          - ./ctf:/root/ctf
         privileged: true
         hostname: sheng_ctf
         restart: always
