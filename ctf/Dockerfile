@@ -15,6 +15,8 @@ RUN sed -i '1, $s/archive.ubuntu.com/free.nchc.org.tw/g' /etc/apt/sources.list &
     sudo apt-get install -y python2.7 python-setuptools python-dev build-essential && \
     # python3 environment
     sudo apt-get install -y python3 python3-setuptools python3-dev python3-pip python3-lxml && \
+    # ruby
+    sudo apt-get install -y ruby && \
     # man、im、tmux、zsh、git、tar、zip、ssh
     sudo apt-get install -y man vim tmux zsh git tar unzip openssh-server && \
     # wget、curl、nc、nmap
@@ -72,7 +74,7 @@ RUN sed -i '1, $s/archive.ubuntu.com/free.nchc.org.tw/g' /etc/apt/sources.list &
     # pngcheck
     sudo apt-get install -y pngcheck && \
     # zsteg
-    sudo apt-get install -y ruby && sudo gem install rubygems-update && sudo update_rubygems && sudo gem install rake -v 12.2.1 && sudo gem install rainbow -v 2.2.2 && sudo gem install zsteg && \
+    sudo gem install rubygems-update && sudo update_rubygems && sudo gem install rake -v 12.2.1 && sudo gem install rainbow -v 2.2.2 && sudo gem install zsteg && \
 
     # mkdir volumes
     mkdir /root/ctf && \
