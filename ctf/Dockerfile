@@ -20,7 +20,7 @@ RUN sed -i '1, $s/archive.ubuntu.com/free.nchc.org.tw/g' /etc/apt/sources.list &
     # man、im、tmux、zsh、git、tar、zip、ssh
     sudo apt-get install -y man vim tmux zsh git tar unzip openssh-server && \
     # wget、curl、nc、nmap
-    sudo apt-get install -y wget curl nmap && \
+    sudo apt-get install -y wget curl netcat nmap && \
     # debug tools
     sudo apt-get install -y gdb gdbserver ltrace strace nasm && \
     # lxml requirements
