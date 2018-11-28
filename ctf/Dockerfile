@@ -79,6 +79,9 @@ RUN sed -i '1, $s/archive.ubuntu.com/free.nchc.org.tw/g' /etc/apt/sources.list &
     # mkdir volumes
     mkdir /root/ctf && \
 
+    # update all
+    sudo ~/.ctf_tools/my_tools/upall.sh && \
+
 	# clean
 	sudo apt-get clean && sudo rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
     # show ip
