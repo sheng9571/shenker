@@ -1,7 +1,5 @@
 # ubuntu 16.04.5
 FROM phusion/baseimage:0.9.22
-# ubuntu 14.04.5
-# FROM phusion/baseimage:0.9.16
 
 RUN sed -i '1, $s/archive.ubuntu.com/free.nchc.org.tw/g' /etc/apt/sources.list && \
 	# update & upgrade & install requirements
@@ -32,8 +30,11 @@ RUN sed -i '1, $s/archive.ubuntu.com/free.nchc.org.tw/g' /etc/apt/sources.list &
 	# set correct time
 	export TZ='Asia/Taipei' && \
     # install tzdata without interactive
-    DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata && \
-    sudo /etc/init.d/ntp stop && sudo cp /usr/share/zoneinfo/Asia/Taipei /etc/localtime && sudo ntpdate tw.pool.ntp.org && sudo /etc/init.d/ntp start && \
+    DEBIAN_FRONTEND=noninteractive sudo apt-get install -y tzdata && \
+    touch /etc/my_init.d/run && \
+    echo "#!/bin/sh" >> /etc/my_init.d/run && \
+    echo "sudo /etc/init.d/ntp stop && sudo cp /usr/share/zoneinfo/Asia/Taipei /etc/localtime  && sudo ntpdate tw.pool.ntp.org && sudo /etc/init.d/ntp start" >> /etc/my_init.d/run && \
+    sudo chmod +x /etc/my_init.d/run && \
 	# pip2 settings
 	sudo easy_install pip && sudo pip2 install --upgrade pip && sudo pip install requests lxml && \
     # pip3 settings
