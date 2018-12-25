@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+
+    base:
+        container_name: sheng_ctf_1604
+        image: sheng_ctf_1604:0.0
+        ports:
+          - "9453:22"
+        build:
+          context: ./
+        volumes:
+          - ./ctf:/root/ctf
+        privileged: true
+        hostname: sheng_ctf_1604
+        restart: always

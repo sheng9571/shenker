@@ -31,6 +31,9 @@ RUN sed -i '1, $s/archive.ubuntu.com/free.nchc.org.tw/g' /etc/apt/sources.list &
 	echo 'root:root' | chpasswd && sudo sed -i 's/\#PermitRootLogin\ yes/PermitRootLogin\ yes/g' /etc/ssh/sshd_config && service ssh reload; service ssh start && rm -f /etc/service/sshd/down && /etc/my_init.d/00_regen_ssh_host_keys.sh\
 	# set correct time
 	export TZ='Asia/Taipei' && \
+    # install tzdata without interactive
+    DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata && \
+    sudo /etc/init.d/ntp stop && sudo cp /usr/share/zoneinfo/Asia/Taipei /etc/localtime && sudo ntpdate tw.pool.ntp.org && sudo /etc/init.d/ntp start && \
 	# pip2 settings
 	sudo easy_install pip && sudo pip2 install --upgrade pip && sudo pip install requests lxml && \
     # pip3 settings
