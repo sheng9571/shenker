@@ -3,8 +3,8 @@ version: '3'
 services:
 
     base:
-        container_name: sheng_ctf_1404
-        image: sheng_ctf_1404:0.0
+        container_name: sheng_ctf
+        image: sheng_ctf:0.0
         ports:
           - "9453:22"
         build:
@@ -12,5 +12,5 @@ services:
         volumes:
           - ./ctf:/root/ctf
         privileged: true
-        hostname: sheng_ctf_1404
+        hostname: sheng_ctf
         restart: always
