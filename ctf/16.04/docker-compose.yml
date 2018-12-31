@@ -6,7 +6,10 @@ services:
         container_name: sheng_ctf
         image: sheng_ctf:0.0
         ports:
+          # ssh
           - "9453:22"
+          # qira
+          - "9487:3002"
         build:
           context: ./
         volumes:

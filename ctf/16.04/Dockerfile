@@ -10,7 +10,7 @@ RUN sed -i '1, $s/archive.ubuntu.com/free.nchc.org.tw/g' /etc/apt/sources.list &
     # ntp, check time
 	sudo apt-get install -y ntp ntpdate && \
     # python2 environment
-    sudo apt-get install -y python2.7 python-setuptools python-dev build-essential && \
+    sudo apt-get install -y python2.7 python-setuptools python-dev build-essential libssl-dev libffi-dev && \
     # python3 environment
     sudo apt-get install -y python3 python3-setuptools python3-dev python3-pip python3-lxml && \
     # ruby
@@ -57,6 +57,12 @@ RUN sed -i '1, $s/archive.ubuntu.com/free.nchc.org.tw/g' /etc/apt/sources.list &
     sudo pip install --upgrade pwntools && \
     # Install radare2
     cd ~/.ctf_tools/radare2/sys/ && ./install.sh && \
+    # Install qira
+    tar -zxvf ~/.ctf_tools/qira/qira-1.2.tar.gz -C ~/ && cd ~/qira-1.2 && ./install.sh && cd ~ && \
+    # update gef
+    wget -vO ~/.ctf_tools/gdb/gef.py https://github.com/hugsy/gef/raw/master/gef.py && \
+    # update checksec
+    wget -vO ~/.ctf_tools/checksec/chsec https://github.com/slimm609/checksec.sh/raw/master/checksec && chmod +x ~/.ctf_tools/checksec/chsec && cp ~/.ctf_tools/checksec/chsec /usr/local/bin/chsec && \
     # Install uncompyle2
     cd ~/.ctf_tools/uncompyle2 && sudo python setup.py install && cd ~ && \
     # Install ROPGadget
@@ -80,6 +86,9 @@ RUN sed -i '1, $s/archive.ubuntu.com/free.nchc.org.tw/g' /etc/apt/sources.list &
     # zsteg
     sudo gem install rubygems-update && sudo update_rubygems && sudo gem install rake -v 12.2.1 && sudo gem install rainbow -v 2.2.2 && sudo gem install zsteg && \
 
+    # copy pip2 to default pip
+    sudo cp /usr/local/bin/pip2 /usr/local/bin/pip && \
+
     # mkdir volumes
     mkdir /root/ctf && \
 
@@ -92,4 +101,4 @@ RUN sed -i '1, $s/archive.ubuntu.com/free.nchc.org.tw/g' /etc/apt/sources.list &
     # ifconfig eth0 2>&- | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'; \
     # ifconfig enp0s31f6 2>&- | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'
 
-EXPOSE 22
+EXPOSE 22 3002
