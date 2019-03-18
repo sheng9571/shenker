@@ -12,6 +12,8 @@ services:
           - "9487:3002"
         build:
           context: ./
+          args:
+              gdb_version: 7.12.1
         volumes:
           - ./ctf:/root/ctf
         privileged: true
