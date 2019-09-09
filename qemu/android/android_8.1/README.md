@@ -35,4 +35,4 @@
 17. We can access Internet via android now!<br />
 ![image](https://github.com/sheng9571/shenker/blob/master/qemu/android/image/android_8.1_17.png)
 ### Known issues
-* Google play service will crash# [Android 8.1-r2 x86](http://rwthaachen.dl.osdn.jp/android-x86/69704/android-x86-8.1-r2.iso)
+* Google play service will crash
