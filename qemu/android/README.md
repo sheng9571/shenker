@@ -10,7 +10,7 @@
 7. Restart networkint service
 8. Start DHCP server (dnsmasq) on "br0" and set dhcp-ip-range
 
-All steps below are contain in [network.sh](https://github.com)
+All steps below are contain in [network.sh](https://github.com/sheng9571/shenker/blob/master/qemu/android/android_8.1/network.sh)
 ### Usage:
 ```
 docker-compose up -d
