@@ -1,0 +1,10 @@
+#! /bin/sh
+
+echo "setting up tap device $1..."
+ip link set "$1" up
+ip link set "$1" master br0
+# echo 1 > /proc/sys/net/ipv4/ip_forward
+# iptables -A INPUT -i tap0 -j ACCEPT
+# iptables -A INPUT -i br0 -j ACCEPT
+# iptables -A FORWARD -i br0 -j ACCEPT
+# iptables -t nat -A POSTROUTING -o br0 -j MASQUERADE

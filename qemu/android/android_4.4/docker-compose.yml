@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+
+    base:
+        container_name: sheng_android_4.4
+        # image: sheng9571/android_4.4:0.0
+        # Build by ourself
+        image: sheng_android_4.4:0.0
+        ports:
+          # ssh
+          - "9487:22"
+          # noVNC
+          - "9287:9287"
+        # Build by ourself
+        build:
+          context: ./
+          args:
+              # virtual monitor number
+              display: 44
+              # version of novnc
+              novnc: 1.1.0
+              # version of websockify
+              websockify: 0.8.0
+        volumes:
+          - ./data:/root/data
+        cap_add:
+            - NET_ADMIN
+        devices:
+            - /dev/net/tun
+            - /dev/kvm
+        privileged: true
+        hostname: sheng_android_4.4
+        restart: always

@@ -1,0 +1,3 @@
+#!/bin/sh
+# get vm's ip
+cat /var/lib/misc/dnsmasq.leases | cut -d" " -f3

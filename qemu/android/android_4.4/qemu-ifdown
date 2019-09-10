@@ -1,0 +1,10 @@
+#! /bin/sh
+
+echo "remove tap device $1..."
+ip link set dev "$1" nomaster
+ip link set "$1" down
+# iptables -D INPUT -i tap0 -j ACCEPT
+# iptables -D INPUT -i br0 -j ACCEPT
+# iptables -D FORWARD -i br0 -j ACCEPT
+# iptables -t nat -D POSTROUTING -o br0 -j MASQUERADE
+# iptables -F;iptables -X;iptables -t nat -F;iptables -t nat -X;iptables -t mangle -F;iptables -t mangle -X;iptables -t raw -F;iptables -t raw -X;
