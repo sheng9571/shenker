@@ -42,7 +42,7 @@ sudo ifconfig $qemubr up
 sudo service networking restart
 
 
-# set-up dns server
+# set-up dhcp server
 sudo echo "interface=$qemubr" >> /etc/dnsmasq.conf
 sudo echo "dhcp-range=$qemubr,$ipstr,$iped,4h" >> /etc/dnsmasq.conf
 sudo service dnsmasq stop
