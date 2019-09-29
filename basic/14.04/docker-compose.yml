@@ -6,9 +6,12 @@ services:
         container_name: sheng_basic
         image: sheng_basic:0.0
         ports:
+          # ssh
           - "9453:22"
         build:
           context: ./
+        volumes:
+          - ./data:/root/data
         privileged: true
         hostname: sheng_basic
         restart: always

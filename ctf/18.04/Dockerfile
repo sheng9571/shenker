@@ -6,7 +6,7 @@ ARG gdb_version
 RUN sed -i '1, $s/archive.ubuntu.com/free.nchc.org.tw/g' /etc/apt/sources.list && \
 	# update & upgrade & install requirements
 	apt-get update && \
-    apt-get dist-upgrade -y && \
+    apt-get --force-yes -o Dpkg::Options::="--force-confold" --force-yes -o Dpkg::Options::="--force-confdef" -fuy dist-upgrade && \
     # sudo
     apt-get install -y sudo && \
 	# set correct time, install ntp, ntpdate tzdata check time
@@ -15,7 +15,7 @@ RUN sed -i '1, $s/archive.ubuntu.com/free.nchc.org.tw/g' /etc/apt/sources.list &
     export DEBCONF_NONINTERACTIVE_SEEN=true && \
     sudo apt-get install -y ntpdate && \
     # install tzdata, ntp without interactive
-    sudo apt-get install -y --no-install-recommends tzdata ntp && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata ntp && \
     touch /etc/my_init.d/run && \
     echo "#!/bin/sh" >> /etc/my_init.d/run && \
     echo "sudo /etc/init.d/ntp stop ; sudo cp /usr/share/zoneinfo/Asia/Taipei /etc/localtime  ; sudo ntpdate TIME4.google.com ; sudo /etc/init.d/ntp start" >> /etc/my_init.d/run && \

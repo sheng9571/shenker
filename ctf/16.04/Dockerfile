@@ -6,7 +6,7 @@ ARG gdb_version
 RUN sed -i '1, $s/archive.ubuntu.com/free.nchc.org.tw/g' /etc/apt/sources.list && \
 	# update & upgrade & install requirements
 	apt-get update && \
-    apt-get dist-upgrade -y && \
+    apt-get --force-yes -o Dpkg::Options::="--force-confold" --force-yes -o Dpkg::Options::="--force-confdef" -fuy dist-upgrade && \
     # sudo
     apt-get install -y sudo && \
     # ntp, check time
