@@ -1,0 +1,90 @@
+#!/bin/sh
+# Usage: gen_server_conf [-p protocal(tcp or udp)] [-n nat_address_segment] [-s path/of/secret/account/password/file] [-k path/of/openvpn/keydir] [-c path/of/openvpn/server/config/file]
+
+proto=tcp-server
+port=5287
+net=10.8.0.0
+secret=/opt/secret
+sec_file=secret
+outdir=/opt/data
+keydir=/etc/openvpn/pki
+conf=/etc/openvpn/server.conf
+
+
+while getopts ":p:n:s:k:c:" args; do
+    case $args in
+        p)
+
+            if [ "$OPTARG" = "udp" ]; then
+                proto=udp
+            elif [ "$OPTARG" = "tcp" ]; then
+                proto=tcp-server
+            else
+                proto=tcp-server
+            fi
+            ;;
+        n)
+            net=$OPTARG
+            ;;
+        s)
+            secret=$OPTARG
+            ;;
+        k)
+            keydir=$OPTARG
+            ;;
+        c)
+            conf=$OPTARG
+            ;;
+        \?)
+            # echo "invalid option: -$OPTARG"
+            # exit 1
+            ;;
+        :)
+            # echo "Option -$OPTARG requires an argument."
+            # exit 1
+            ;;
+    esac
+done
+
+
+rm -f ${secret}
+rm -f ${conf}
+mkdir -p ${outdir}
+
+# check out secret file is exist, if not create a new one
+if [ -f "${outdir}/${sec_file}" ]; then
+    :
+else
+    touch "${outdir}/${sec_file}"
+fi
+
+# create a link file for out secret file, to let operation more convinence
+sudo ln -fs ${outdir}/${sec_file} ${secret}
+
+
+echo "mode server" > ${conf}
+echo "tls-server" >> ${conf}
+echo "dev tun" >> ${conf}
+echo "proto ${proto}" >> ${conf}
+echo "port ${port}" >> ${conf}
+echo "key-direction 0" >> ${conf}
+echo "cipher AES-256-CBC" >> ${conf}
+echo "auth SHA256" >> ${conf}
+echo "user nobody" >> ${conf}
+echo "group nogroup" >> ${conf}
+echo 'push "redirect-gateway def1 bypass-dhcp"' >> ${conf}
+echo 'push "dhcp-option DNS 8.8.8.8"' >> ${conf}
+echo 'push "dhcp-option DNS 8.8.4.4"' >> ${conf}
+echo "server ${net} 255.255.255.0" >> ${conf}
+echo "duplicate-cn" >> ${conf}
+echo "reneg-sec 0" >> ${conf}
+echo "script-security 2" >> ${conf}
+echo 'auth-user-pass-verify "/usr/bin/verify.py '${secret}'" via-file' >> ${conf}
+echo "verify-client-cert none" >> ${conf}
+echo "username-as-common-name" >> ${conf}
+echo "ca ${keydir}/ca.crt" >> ${conf}
+echo "cert ${keydir}/server.crt" >> ${conf}
+echo "key ${keydir}/server.key" >> ${conf}
+echo "tls-auth ${keydir}/ta.key 0" >> ${conf}
+echo "dh ${keydir}/dh.pem" >> ${conf}
+echo "log /var/log/openvpn/openvpn.log" >> ${conf}

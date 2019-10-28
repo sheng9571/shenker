@@ -1,0 +1,118 @@
+#!/bin/bash
+# Usage: openvpn_setting [-e path/of/easyrsa] [-k path/of/openvpn/keydir]
+
+# Ref: https://liam.page/2016/11/11/ways-to-parse-arguments-in-shell-script/
+
+
+easyrsa=/root/easyrsa
+keydir=/etc/openvpn/pki
+
+
+
+# the first ":" represent close error log
+# "e" defaults "-e" is an tag
+# "e:" represent "-a" needs an argument.
+# "e:k?" represent "-e" needs an argument. k is an tag without an argument
+while getopts ":e:k:" args; do
+    case $args in
+        e)
+            easyrsa=$OPTARG
+            ;;
+        k)
+            keydir=$OPTARG
+            ;;
+        \?)
+            # "?" represent undefined flag
+            # echo "invalid option: -$OPTARG"
+            # exit 1
+            ;;
+        :)
+            # this ":" represent valid flag needs an argument."
+            # echo "Option -$OPTARG requires an argument."
+            # exit 1
+            ;;
+    esac
+done
+
+
+echo ------------------------
+echo setting up OpenVPN
+
+# setting certificate
+sudo mkdir -p ${keydir}
+cd ${easyrsa}
+cp -f vars.example vars
+# replace some variables
+sudo sed -i 's/\#set\_var\ EASYRSA\_REQ\_COUNTRY\t\"US\"/set\_var\ EASYRSA\_REQ\_COUNTRY\ \"TW\"/g' ${easyrsa}/vars
+sudo sed -i 's/\#set\_var\ EASYRSA\_REQ\_PROVINCE\t\"California\"/set\_var\ EASYRSA\_REQ\_PROVINCE\ \"Taiwan\"/g' ${easyrsa}/vars
+sudo sed -i 's/\#set\_var\ EASYRSA\_REQ\_CITY\t\"San\ Francisco\"/set\_var\ EASYRSA\_REQ\_CITY\ \"Taipei\"/g' ${easyrsa}/vars
+sudo sed -i 's/\#set\_var\ EASYRSA\_REQ\_ORG\t\"Copyleft\ Certificate\ Co\"/set\_var\ EASYRSA\_REQ\_ORG\t\"Lab\"/g' ${easyrsa}/vars
+sudo sed -i 's/\#set\_var\ EASYRSA\_REQ\_EMAIL\t\"me@example.net\"/set\_var\ EASYRSA\_REQ\_EMAIL\ "lab@openvpn"/g' ${easyrsa}/vars
+sudo sed -i 's/\#set\_var\ EASYRSA\_REQ\_OU\t\t\"My\ Organizational\ Unit\"/set\_var\ EASYRSA\_REQ\_OU\ \"Lab\"/g' ${easyrsa}/vars
+
+echo ------------------------
+echo -en "\n"
+
+echo "Generating CA Certificate"
+# Generate server certificate & keys
+cd ${easyrsa}
+${easyrsa}/easyrsa init-pki
+# /root/easyrsa/pki/ca.crt
+echo -en "\n" | ${easyrsa}/easyrsa build-ca nopass
+cd ~
+
+echo ------------------------
+echo -en "\n"
+
+echo "Generating server certificate & keys"
+# Generate server certificate & keys
+cd ${easyrsa}
+# /root/easyrsa/pki/private/server.key
+echo -en '\n' | ${easyrsa}/easyrsa gen-req server nopass
+# /root/easyrsa/pki/issued/server.crt
+echo -en 'yes\n' | ${easyrsa}/easyrsa sign-req server server
+cd ~
+
+echo ------------------------
+echo -en "\n"
+
+echo "Generating Diffie-Hellman key"
+# Generate Diffie-Hellman key
+cd ${easyrsa}
+# /root/easyrsa/pki/dh.pem
+${easyrsa}/easyrsa gen-dh
+cd ~
+
+echo ------------------------
+echo -en "\n"
+
+echo "Generating HMAC signature for TLS"
+# Generate HMAC signature for TLS
+cd ${easyrsa}
+# /root/easyrsa/ta.key
+$(which openvpn) --genkey --secret ta.key
+cd ~
+
+echo ------------------------
+echo -en "\n"
+
+echo "Generating client certificate & keys"
+# Generate client certificate & keys
+cd ${easyrsa}
+# /root/easyrsa/pki/private/client.key
+echo -en '\n' | ${easyrsa}/easyrsa gen-req client nopass
+# /root/easyrsa/pki/issued/client.crt
+echo -en 'yes\n' | ${easyrsa}/easyrsa sign-req client client
+cd ~
+
+echo ------------------------
+echo -en "\n"
+
+echo "Copy keys and certificate"
+# Copy keys and certificate
+sudo mkdir -p ${keydir}
+sudo cp -f ${easyrsa}/pki/ca.crt ${easyrsa}/pki/issued/server.crt ${easyrsa}/pki/private/server.key ${easyrsa}/ta.key ${easyrsa}/pki/dh.pem ${easyrsa}/pki/issued/client.crt ${easyrsa}/pki/private/client.key ${keydir}/
+cd ~
+
+echo ------------------------
+echo Done

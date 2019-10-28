@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+
+    base:
+        container_name: sheng_openvpn
+        image: sheng9571/openvpn:0.0
+        # Build by ourself
+        # image: sheng_openvpn:0.0
+        ports:
+          # openvpn
+          - "5287:5287"
+          # If you want to use UDP protocal
+          # - "5287:5287/udp"
+        # Build by ourself
+        # build:
+        #   context: ./
+        #   args:
+        #       # version of EasyRSA
+        #       easyrsa: 3.0.4 
+        #       # protocal: udp or tcp-server
+        #       proto: tcp-server
+        #       # Remote OpenVPN service IP address
+        #       remote: 127.0.0.1
+        #       # Remote OpenVPN service port
+        #       r_port: 5287
+        volumes:
+          - ./data:/opt/data
+        cap_add:
+            - NET_ADMIN
+        devices:
+            - /dev/net/tun
+            - /dev/kvm
+        privileged: true
+        hostname: sheng_openvpn
+        restart: always

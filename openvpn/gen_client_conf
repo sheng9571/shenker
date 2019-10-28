@@ -1,0 +1,52 @@
+#!/bin/sh
+# Usage: gen_client_conf [-r remote_ip] [-p remote_port] [-c path/of/openvpn/client/config]
+
+
+remote=127.0.0.1
+port=5287
+conf=client.ovpn
+
+rm -f ${conf}
+
+
+while getopts ":r:p:c:" args; do
+    case $args in
+        r)
+            remote=$OPTARG
+            ;;
+        p)
+            port=$OPTARG
+            ;;
+        c)
+            conf=$OPTARG
+            ;;
+        \?)
+            # echo "invalid option: -$OPTARG"
+            # exit 1
+            ;;
+        :)
+            # echo "Option -$OPTARG requires an argument."
+            # exit 1
+            ;;
+    esac
+done
+
+
+echo "tls-client" >> ${conf}
+echo "dev tun" >> ${conf}
+echo "proto tcp-client" >> ${conf}
+echo "remote ${remote} ${port}" >> ${conf}
+echo "resolv-retry infinite" >> ${conf}
+echo "nobind" >> ${conf}
+echo "user nobody" >> ${conf}
+echo "group nogroup" >> ${conf}
+echo "persist-key" >> ${conf}
+echo "persist-tun" >> ${conf}
+echo "remote-cert-tls server" >> ${conf}
+echo "cipher AES-256-CBC" >> ${conf}
+echo "auth SHA256" >> ${conf}
+echo "reneg-sec 0" >> ${conf}
+echo "pull" >> ${conf}
+echo "auth-user-pass" >> ${conf}
+echo "script-security 2" >> ${conf}
+echo "verb 3" >> ${conf}

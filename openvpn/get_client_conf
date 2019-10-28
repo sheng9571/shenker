@@ -1,0 +1,62 @@
+#!/bin/sh
+# Usage: get_client_conf [-e path/of/easyrsa] [-k path/of/openvpn/keydir] [-r remote_ip] [-p remote_port] [-c path/of/openvpn/client/conf]
+
+easyrsa=/root/easyrsa
+keydir=/etc/openvpn/pki
+remote=127.0.0.1
+port=5287
+conf=client.ovpn
+outdir=/opt/data
+
+rm -f ${conf}
+
+
+while getopts ":e:k:r:p:c:" args; do
+    case $args in
+        e)
+            easyrsa=$OPTARG
+            ;;
+        k)
+            keydir=$OPTARG
+            ;;
+        r)
+            remote=$OPTARG
+            ;;
+        p)
+            port=$OPTARG
+            ;;
+        c)
+            conf=$OPTARG
+            ;;
+        \?)
+            # echo "invalid option: -$OPTARG"
+            # exit 1
+            ;;
+        :)
+            # echo "Option -$OPTARG requires an argument."
+            # exit 1
+            ;;
+    esac
+done
+
+
+cd /root
+sudo mkdir -p /tmp/client
+sudo mkdir -p /root/data
+sudo cp -f ${easyrsa}/pki/ca.crt ${easyrsa}/ta.key ${easyrsa}/pki/issued/client.crt ${easyrsa}/pki/private/client.key /tmp/client
+cd /tmp/client
+/usr/bin/gen_client_conf -r ${remote} -p ${port} -c ${conf}
+echo "<ca>" >> ${conf}
+cat ca.crt >> ${conf}
+echo "</ca>" >> ${conf}
+echo "key-direction 1" >> ${conf}
+echo "<tls-auth>" >> ${conf}
+cat ta.key >> ${conf}
+echo "</tls-auth>" >> ${conf}
+cd /tmp
+tar -Jcvf ${outdir}/client.tar.xz client
+rm -rf /tmp/client
+cd /root
+
+echo ------------------------
+echo Done
