@@ -1,3 +1,5 @@
 #!/bin/sh
 sudo /usr/local/squid/sbin/squid  -k reconfigure
-sudo /usr/local/squid/sbin/squid -k restart
+# sudo /usr/local/squid/sbin/squid -k restart
+sudo kill -9 $(pgrep -f "squid-1")
+sudo /usr/local/squid/sbin/squid start

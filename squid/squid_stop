@@ -1,3 +1,4 @@
 #!/bin/sh
 # sudo killall squid
-sudo /usr/local/squid/sbin/squid -k kill
+# sudo /usr/local/squid/sbin/squid -k kill
+sudo kill -9 $(pgrep -f "squid-1")

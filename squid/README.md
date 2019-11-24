@@ -31,6 +31,15 @@ name3_passwd
 
 ### Some tool-kits in container：
 
+#### Add users to authenticate clients
+```
+# Inside the container
+"$(which python2)" /usr/local/sbin/gen_auth.py /root/sec_file "path_of_htpasswd"
+
+# In host
+docker exec -it [container_name] "$(which python2)" /usr/local/sbin/gen_auth.py /root/sec_file "path_of_htpasswd"
+```
+
 #### Start Squid Service
 ```
 # Inside the container
@@ -58,7 +67,7 @@ docker exec -it [container_name] squid_stop
 docker exec -it [container_name] squid_restart
 ```
 
-
+---
 
 ##### SSL-Bump (HTTPS Sniffer)
 *Not completed ...*
