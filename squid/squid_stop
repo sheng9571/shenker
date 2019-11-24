@@ -1,0 +1,3 @@
+#!/bin/sh
+# sudo killall squid
+sudo /usr/local/squid/sbin/squid -k kill

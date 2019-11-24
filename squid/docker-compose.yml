@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+
+    base:
+        container_name: sheng_squid
+        image: sheng9571/squid:0.0
+        # Build by ourself
+        # image: sheng_squid:0.0
+        ports:
+          # squid http port
+          - "8725:8725"
+          # squid https port
+          # - "9487:9487"
+        # Build by ourself
+        build:
+          context: ./
+        volumes:
+          - ./data:/opt/data
+        privileged: true
+        hostname: sheng_squid
+        restart: always
